@@ -1,4 +1,3 @@
-# py-thingsparser
-Natural Language Things Parser in Python
+# Natural Language Things Parser in Python
 
 Not functioning yet.
