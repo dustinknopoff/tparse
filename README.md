@@ -19,7 +19,7 @@
 </details>
 <br />
 
-This is a port of [@pdavidsonreiler](https://github.com/pdavisonreiber/Public-Drafts-Scripts/tree/master/Things%20Parser)'s *Drafts 5* parser to Python.
+This is a port of [@pdavidsonreiler](https://github.com/pdavisonreiber/Public-Drafts-Scripts/tree/master/Things%20Parser)'s *Things Parser for Drafts 5* to Python.
 
 It currently supports near parity in syntax:
 
@@ -61,8 +61,11 @@ python install .
 
 The original used a combination of *Moment.js*, *Chrono.js*, and *Drafts 5* specific wrappers for the *Things 3* URL scheme and callback urls. This repository also includes a Python wrapper for *Things 3* and callback urls.
 
-This is not a direct porting of [@pdavidsonreiler](https://github.com/pdavisonreiber/Public-Drafts-Scripts/tree/master/Things%20Parser)'s parser. This is in particular due to the nuances of JavaScript that are not possible in Python. For this reason, the code is organized as such:
+This is not a direct porting of [@pdavidsonreiler](https://polymaths.blog/2018/04/things-parser-two-point-o-for-drafts-5)'s parser. This is in particular due to the nuances of JavaScript that are not possible in Python. For this reason, the code is organized as such:
 
 1. Most importantly, all parsing functionality lives within the `Parser` class. It takes care of splitting text into parts and then delegating to `Block` or `Line` types. 
 2. `Block` and `Line` types inherit common functionality from the `ParsedItem` class. This is particularly helpful in the case of `Block`s due to the *parent* line being separated from it's children architecturally rather than by call.
 3. The conversion to Things elements is separated into it's own class for increased encapsulation and clarity.
+
+- [thingsJSONCoder.py](things_parser/thingsJSONCoder.py) is the python wrapper for [thingsJSONCoder](https://github.com/culturedcode/ThingsJSONCoder) which is written in Swift.
+- [CallbackURL.py](things_parser/CallbackURL.py) is the python wrapper for [Callback URL](https://github.com/agiletortoise/drafts-documentation/wiki/CallbackURL) which is Draft's JavaScript wrapper for callback urls in Swift.
