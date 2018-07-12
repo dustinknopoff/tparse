@@ -1,3 +1,4 @@
+#!/usr/bin/env python3.6
 import pprint
 import re
 from datetime import timedelta

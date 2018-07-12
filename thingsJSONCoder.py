@@ -1,4 +1,4 @@
-from datetime import datetime
+#!/usr/bin/env python3.6
 import json
 from enum import Enum
 from typing import List
@@ -134,7 +134,6 @@ class TJSChecklistItem(TJSModelItem):
 # Invalid Parameters Exception
 class InvalidParams(Exception):
     pass
-
 
 # kwargs = {'title': 'Fly me Away!', 'checklist-items': ['1']}
 # tjs = TJSTodo(Operation.CREATE, **kwargs)
