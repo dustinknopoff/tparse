@@ -6,8 +6,8 @@ from typing import Dict
 
 from dateutil.parser import parse
 
-from CallbackURL import *
-from thingsJSONCoder import *
+from things_parser.CallbackURL import *
+from things_parser.thingsJSONCoder import *
 
 delimiters: Dict[str, str] = {
     'tags': "@",

@@ -7,7 +7,7 @@ try:
 except ModuleNotFoundError:
     from pyperclip import paste as clipper
 
-from naturalThingsParser import Parser
+from things_parser.naturalThingsParser import Parser
 
 delimiters: Dict[str, str] = {
     'tags': "@",
