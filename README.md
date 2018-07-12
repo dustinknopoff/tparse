@@ -80,10 +80,15 @@ wget https://github.com/dustinknopoff/py-thingsparser/releases/download/v0.1-bet
 ```
 tar -xzf tparse-0.1.tar.gz
 ```
+
+6. Go to `things_parser.py`. 
+7. Add at the top of the file `import appex`. 
+8. Change line 55 to `string = appex.get_text()`.
+
 <br />
 <strong>For use as a share sheet extension</strong>
 
-Go to Settings>Share Extension Shortcuts>`+`>find and click `things_parser.py`> add `-c` as arguments> customize title and icon details> tap Done.
+Go to Settings>Share Extension Shortcuts>`+`>find and click `things_parser.py`> add `-f` as arguments> customize title and icon details> tap Done.
 </details>
 
 ## A More Technical Overview
