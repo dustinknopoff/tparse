@@ -91,6 +91,21 @@ tar -xzf tparse-0.1.tar.gz
 Go to Settings>Share Extension Shortcuts>`+`>find and click `things_parser.py`> add `-f` as arguments> customize title and icon details> tap Done.
 </details>
 
+### Arguments
+
+```
+usage: things_parser.py [-h] [-f FILE] [-c] [-t]
+
+Natural Things Parser:
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f FILE, --file FILE  Next argument needs to be a valid file path
+  -c, --clip            tparse will extract text from clipboard
+  -t, --test            tparse will use some sample test strings.
+
+```
+
 ## A More Technical Overview
 
 The original used a combination of *Moment.js*, *Chrono.js*, and *Drafts 5* specific wrappers for the *Things 3* URL scheme and callback urls. This repository also includes a Python wrapper for *Things 3* and callback urls.

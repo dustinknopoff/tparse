@@ -46,8 +46,8 @@ def main():
         """
     argsparsed = argparse.ArgumentParser(description='Natural Things Parser:')
     argsparsed.add_argument('-f', '--file', help='Next argument needs to be a valid file path', type=str)
-    argsparsed.add_argument('-c', '--clip', help='NTP will extract text from clipboard', action='store_true')
-    argsparsed.add_argument('-t', '--test', help='NTP will use some sample test strings.', action='store_true')
+    argsparsed.add_argument('-c', '--clip', help='tparse will extract text from clipboard', action='store_true')
+    argsparsed.add_argument('-t', '--test', help='tparse will use some sample test strings.', action='store_true')
 
     args = argsparsed.parse_args()
     if args.file:
