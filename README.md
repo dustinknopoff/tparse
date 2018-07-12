@@ -8,6 +8,12 @@ The following are issues with this release:
 2. Block sublines are overrides by the last element.
 3. The JSON package is not accepted by *Things 3* as valid.
 
+### Plan:
+
+- [ ] fix issues
+- [ ] make an Automator Service for applying to a file
+- [ ] make an Automator Application for dragging files on to to run.
+
 This is a port of [@pdavidsonreiler](https://github.com/pdavisonreiber/Public-Drafts-Scripts/tree/master/Things%20Parser)'s *Drafts 5* parser to Python.
 
 It currently supports near parity in syntax:
