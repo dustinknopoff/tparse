@@ -41,6 +41,22 @@ task 3
 
 [Check out the original for more examples.](https://github.com/pdavisonreiber/Public-Drafts-Scripts/tree/master/Things%20Parser)
 
+## How to Install
+
+Enter into your shell:
+
+```
+pip install git+https://github.com/dustinknopoff/py-thingsparser.git
+```
+
+Or:
+
+```
+git clone https://github.com/dustinknopoff/py-thingsparser
+cd py-thingsparser
+python install .
+```
+
 ## A More Technical Overview
 
 The original used a combination of *Moment.js*, *Chrono.js*, and *Drafts 5* specific wrappers for the *Things 3* URL scheme and callback urls. This repository also includes a Python wrapper for *Things 3* and callback urls.
