@@ -1,15 +1,12 @@
-import re
-import sys
-from datetime import timedelta
-from shutil import get_terminal_size
-from typing import Dict
 import pprint
+import re
+from datetime import timedelta
+from typing import Dict
+
 from dateutil.parser import parse
 
 from CallbackURL import *
 from thingsJSONCoder import *
-
-width = get_terminal_size(fallback=(30, 30))
 
 delimiters: Dict[str, str] = {
     'tags': "@",
@@ -257,7 +254,7 @@ class Parser:
     def send_to_things(self):
         adapter = ThingsAdapter(self.items)
         package = adapter.create()
-        print("Final JSON:\n" + '='*50)
+        print("Final JSON:\n" + '=' * 50)
         pprint.pprint(package)
         cb = CallbackURL()
         cb.base_url = "things:///json?"
@@ -296,21 +293,3 @@ class ThingsAdapter:
                 self.data.append(todo)
         container = TJSContainer(self.data)
         return container.export()
-
-
-if __name__ == '__main__':
-    teststring = "Task name at London on Wednesday at 6pm #Project Name ==Heading @Tag 1 @Tag 2 " \
-                 "//Additional Note !Friday *first thing *second thing *third thing"
-    test2 = """
-    ``
-    today at 1 #Portfolio @Now
-    make bread
-    toast
-    oranges !Friday
-    -at London do More
-    ``
-    """
-    string = open(sys.argv[1], 'r')
-    parser = Parser(delimiters, escapes)
-    parser.parse(test2)
-    parser.send_to_things()
