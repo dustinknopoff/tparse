@@ -6,7 +6,7 @@ def readme():
         return f.read()
 
 
-setup(name='things_parser',
+setup(name='tparse',
       version='0.1',
       description='Natural language parser for Things 3.',
       long_description=readme(),
