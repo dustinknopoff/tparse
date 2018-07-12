@@ -22,7 +22,7 @@ task 3
 
 ```
 
-[Check out the original for me examples.](https://github.com/pdavisonreiber/Public-Drafts-Scripts/tree/master/Things%20Parser)
+[Check out the original for more examples.](https://github.com/pdavisonreiber/Public-Drafts-Scripts/tree/master/Things%20Parser)
 
 ## A More Technical Overview
 
