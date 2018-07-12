@@ -59,7 +59,7 @@ python install .
 
 <details>
 <summary>  Not available yet.</summary>
-### For iOS.
+	<h3>For iOS</h3>
 
 1. Make sure you have [Pythonista](https://itunes.apple.com/us/app/pythonista-3/id1085978097?ls=1&mt=8).
 2. Install [StaSH](https://github.com/ywangd/stash).
@@ -81,7 +81,7 @@ wget https://github.com/dustinknopoff/py-thingsparser/releases/download/v0.1-bet
 tar -xzf tparse-0.1.tar.gz
 ```
 <br />
-**For use as a share sheet extension**
+<strong>For use as a share sheet extension</strong>
 
 Go to Settings>Share Extension Shortcuts>`+`>find and click `things_parser.py`> add `-c` as arguments> customize title and icon details> tap Done.
 </details>
