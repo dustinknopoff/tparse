@@ -2,7 +2,10 @@
 
 ## NOTE:
 
-The following are issues with this release:
+<details>
+<summary>
+	The following are issues with this release:
+</summary>
 
 1. Cannot recognize `Wednesday at 6` as PM or AM but returns 6 as this the day of the output.
 2. Block sublines are overrides by the last element.
@@ -13,6 +16,8 @@ The following are issues with this release:
 - [ ] fix issues
 - [ ] make an Automator Service for applying to a file
 - [ ] make an Automator Application for dragging files on to to run.
+</details>
+<br />
 
 This is a port of [@pdavidsonreiler](https://github.com/pdavisonreiber/Public-Drafts-Scripts/tree/master/Things%20Parser)'s *Drafts 5* parser to Python.
 
