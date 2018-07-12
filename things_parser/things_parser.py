@@ -2,8 +2,10 @@
 import argparse
 import os
 from typing import Dict
-
-import pyperclip
+try:
+    from clipboard import get as clipper
+except ModuleNotFoundError:
+    from pyperclip import paste as clipper
 
 from naturalThingsParser import Parser
 
@@ -53,7 +55,7 @@ def main():
         string = open(args.file, 'r')
     elif args.clip:
         print("Accessing the clipboard now.")
-        string = pyperclip.paste()
+        string = clipper()
     elif args.test:
         print("Using tests now.")
         string = test2
