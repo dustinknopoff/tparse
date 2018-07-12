@@ -1,7 +1,7 @@
 #!/usr/bin/env python3.6
 import pprint
 import re
-from datetime import timedelta
+from datetime import timedelta, datetime
 from typing import Dict
 
 from dateutil.parser import parse

@@ -1,8 +1,10 @@
 from setuptools import setup
 
+
 def readme():
     with open('README.md') as f:
         return f.read()
+
 
 setup(name='things_parser',
       version='0.1',
@@ -17,5 +19,9 @@ setup(name='things_parser',
           'pyperclip',
           'python-dateutil'
       ],
-      scripts=['bin/things-parser'],
+      entry_points={
+          'console_scripts': [
+                'tparse=things_parser.things_parser:main'
+            ],
+      },
       zip_safe=False)
