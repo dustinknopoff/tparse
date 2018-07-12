@@ -32,7 +32,7 @@ task 3
 
 ## A More Technical Overview
 
-The original used a combination of *Moment.js*, *Chrono.js*, and *Drafts 5* specific wrappers for the *Things 3* URL scheme and callback urls. This repository also includes a Python wrapper *Things 3* and callback urls.
+The original used a combination of *Moment.js*, *Chrono.js*, and *Drafts 5* specific wrappers for the *Things 3* URL scheme and callback urls. This repository also includes a Python wrapper for *Things 3* and callback urls.
 
 This is not a direct porting of [@pdavidsonreiler](https://github.com/pdavisonreiber/Public-Drafts-Scripts/tree/master/Things%20Parser)'s parser. This is in particular due to the nuances of JavaScript that are not possible in Python. For this reason, the code is organized as such:
 
