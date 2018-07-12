@@ -1,11 +1,15 @@
 import re
-from datetime import datetime
+import sys
+from datetime import timedelta
+from shutil import get_terminal_size
 from typing import Dict
+import pprint
+from dateutil.parser import parse
 
-import parsedatetime
-
-from thingsJSONCoder import *
 from CallbackURL import *
+from thingsJSONCoder import *
+
+width = get_terminal_size(fallback=(30, 30))
 
 delimiters: Dict[str, str] = {
     'tags': "@",
@@ -18,11 +22,22 @@ delimiters: Dict[str, str] = {
     'block': "``"
 }
 
+escapes: Dict[str, str] = {
+    '@': '-at',
+    '#': '-hash',
+    '+': '-plus',
+    '//': '-slash',
+    '==': '-qq',
+    '!': '-ex',
+    '*': '-star',
+    '``': '-bl'
+}
+
 
 # Represents common values of Blocks and Lines
 class ParserItem:
     def __init__(self, string):
-        self.params = {}
+        self.params: Dict[str, str] = {}
         self.string: str = string
 
 
@@ -63,6 +78,9 @@ class Block(ParserItem):
                     self.lines[index].params[key] = value
             except KeyError:
                 self.lines[index].params[key] = value
+        print(f"Current parameters in self.lines at index: {index}")
+        pprint.pprint(self.lines[index].params)
+        print('=' * 50 + '\n\n')
 
 
 class Line(ParserItem):
@@ -74,9 +92,10 @@ class Line(ParserItem):
 
 
 class Parser:
-    def __init__(self, delims):
+    def __init__(self, delims, escapechars):
         self.delimiter: Dict[str, str] = delims
         self.delimiter.pop('block')
+        self.escapechars: Dict[str, str] = escapechars
         self.items: List[Line] = []
 
     @staticmethod
@@ -111,19 +130,28 @@ class Parser:
         :return: updated dict of parsed data.
         """
         # Temporary variable for title-date
+        # print(parsed)
         string = parsed.pop('title-date')
+        combned = ''
+        if hasattr(string, '__iter__'):
+            for i in string:
+                combned += i
+            string = combned
         # Parse date
-        cal = parsedatetime.Calendar()
-        time_struct, parse_status = cal.parse(string)
-        temp = datetime(*time_struct[:6])
-        # Convert to ISO8601 format for Things compatibility
-        date = datetime.isoformat(temp)
-        # If no date is found return None
-        if 'today' in string:
+        try:
+            parsd = parse(string, fuzzy=True, fuzzy_with_tokens=True, default=datetime.now())
+            # Make Things compatible format
+            date = parsd[0].isoformat()
+            if parsd[0] < datetime.now():
+                date = parsd[0] + timedelta(days=7)
+                date = date.isoformat()
+            # Extract title from parsed tokens
+            title = parsd[1][0].strip()
+            # Add to dictionary
+        except ValueError:
             date = ''
-        title = string.split('on')[0]
-        # Add to self.parsed
-        parsed['title'] = title.strip()
+            title = string
+        parsed['title'] = title
         parsed['when'] = date
         return parsed
 
@@ -135,11 +163,14 @@ class Parser:
         :return: updated dict of parsed data.
         """
         if 'deadline' in parsed.keys():
-            cal = parsedatetime.Calendar()
-            time_struct, parse_status = cal.parse(parsed['deadline'])
-            temp = datetime(*time_struct[:6])
-            parsed['deadline'] = datetime.isoformat(temp)
+            parsd = parse(parsed['deadline'], fuzzy=True, default=datetime.now())
+            if parsd < datetime.now():
+                parsd = parsd + timedelta(days=7)
+            parsed['deadline'] = parsd.isoformat()
         return parsed
+
+    # TODO: Allow @,#, etc. to be including using escaping
+    # def __escape(self, parsed: Dict[str, str]) -> Dict[str, str]:
 
     def parse(self, string: str):
         """
@@ -172,8 +203,10 @@ class Parser:
                 block.fill_array(len(sentences))
                 for i in range(0, len(sentences)):
                     # Only change values which exist
+                    # print(block.lines[i])
                     block.override_non_none(self.parse_line(sentences[i]), i)
                 for line in block.lines:
+                    # print(line)
                     self.items.append(line)
 
     def parse_line(self, string: str) -> Dict[str, str]:
@@ -212,6 +245,7 @@ class Parser:
             result['@'] = result['@'][0]
         if len(result['==']) == 1:
             result['=='] = result['=='][0]
+        # result = self.__escape(result)
         # Convert to names instead of delimiters as keys
         result = self.__convert_to_names(result)
         # Split the titles and dates
@@ -223,6 +257,8 @@ class Parser:
     def send_to_things(self):
         adapter = ThingsAdapter(self.items)
         package = adapter.create()
+        print("Final JSON:\n" + '='*50)
+        pprint.pprint(package)
         cb = CallbackURL()
         cb.base_url = "things:///json?"
         cb.add_parameter("data", package)
@@ -262,16 +298,19 @@ class ThingsAdapter:
         return container.export()
 
 
-teststring = "Task name on Wednesday at 6pm #Project Name ==Heading @Tag 1 @Tag 2 //Additional Note !Friday " \
-             "*first thing *second thing *third thing"
-test2 = """
-``
-today at 1 #Portfolio @Now
-make bread
-toast
-oranges !Friday
-``
-"""
-parser = Parser(delimiters)
-parser.parse(test2)
-parser.send_to_things()
+if __name__ == '__main__':
+    teststring = "Task name at London on Wednesday at 6pm #Project Name ==Heading @Tag 1 @Tag 2 " \
+                 "//Additional Note !Friday *first thing *second thing *third thing"
+    test2 = """
+    ``
+    today at 1 #Portfolio @Now
+    make bread
+    toast
+    oranges !Friday
+    -at London do More
+    ``
+    """
+    string = open(sys.argv[1], 'r')
+    parser = Parser(delimiters, escapes)
+    parser.parse(test2)
+    parser.send_to_things()

@@ -1,4 +1,6 @@
 future==0.16.0
-parsedatetime==2.4
 python-dateutil==2.7.3
+pytz==2018.5
+regex==2018.7.11
 six==1.11.0
+tzlocal==1.5.1
