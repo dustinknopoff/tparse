@@ -19,6 +19,7 @@ delimiters: Dict[str, str] = {
 }
 
 
+# Represents common values of Blocks and Lines
 class ParserItem:
     def __init__(self, string):
         self.params = {}
@@ -44,7 +45,6 @@ class Block(ParserItem):
         if 'new-project' in self.params.keys() and self.params['new-project'] is not '':
             outparams['project'] = outparams.pop('new-project')
         for i in range(0, maximum):
-            print(i)
             templine = Line()
             templine.params = outparams
             self.lines.append(templine)
@@ -55,9 +55,13 @@ class Block(ParserItem):
         :param parsed: dict of parsed data.
         :param index: index of array
         """
+        # For every key, value in the sub lines, check if they're different from the master and override
         for key, value in parsed.items():
-            print(self.lines[index])
-            if value is not self.lines[index].params[key] and not '':
+            try:
+                # Check to see if the value is empty or not equal to the master
+                if value not in ('', []) and parsed[key] is not self.lines[index].params[key]:
+                    self.lines[index].params[key] = value
+            except KeyError:
                 self.lines[index].params[key] = value
 
 
@@ -89,12 +93,12 @@ class Parser:
         yield text[prev:]
 
     def __convert_to_names(self, parsed: Dict[str, str]) -> Dict[str, str]:
-        for key, value in self.delimiter.items():
-            """
+        """
         Converts parsed dictionary to {name: value} instead of {delimiter: value}
         :param parsed: dict of parsed data.
         :return: updated dict of parsed data.
         """
+        for key, value in self.delimiter.items():
             if value in parsed.keys():
                 parsed[key] = parsed.pop(value)
         return parsed
@@ -155,7 +159,6 @@ class Parser:
                     self.items.append(line)
             else:
                 paragraph = re.findall(r'(?<=``)((.|\n)*)(?=``)', paragraph)[0][0]
-                print(paragraph[0])
                 block = Block()
                 block.string = paragraph
                 sentences = paragraph.split('\n')
@@ -202,21 +205,24 @@ class Parser:
                         result[str(split_list[i])[:1]] = str(split_list[i])[1:].strip()
                 else:
                     raise Exception("Impossible error.")
+        # Flatten lists if there is only one element
         if len(result['*']) == 1:
             result['*'] = result['*'][0]
         if len(result['@']) == 1:
             result['@'] = result['@'][0]
         if len(result['==']) == 1:
             result['=='] = result['=='][0]
+        # Convert to names instead of delimiters as keys
         result = self.__convert_to_names(result)
+        # Split the titles and dates
         result = self.__split_title_date(result)
+        # Get the date from the deadline
         result = self.__parse_deadline(result)
         return result
 
     def send_to_things(self):
         adapter = ThingsAdapter(self.items)
         package = adapter.create()
-        print(package)
         cb = CallbackURL()
         cb.base_url = "things:///json?"
         cb.add_parameter("data", package)
@@ -229,13 +235,16 @@ class ThingsAdapter:
         self.data: List[TJSModelItem] = []
 
     def create(self):
-
+        # For every item
         for line in self.items:
-            if 'new-project' in line.params.keys() and line.params['new-project'] is not '':
-
+            # If there is a new project key, make a new project and add to data
+            if type(line) is dict:
+                continue
+            elif 'new-project' in line.params.keys() and line.params['new-project'] is not '':
                 project = TJSProject(Operation.CREATE, title=line.params['new-project'])
                 self.data.append(project)
             else:
+                # For special types, convert to into Things Type
                 if 'checklist-item' in line.params.keys():
                     arr = []
                     for checklist in line.params['checklist-item']:
@@ -245,7 +254,8 @@ class ThingsAdapter:
                     arr = []
                     for heading in line.params['heading']:
                         TJSHeader(Operation.CREATE, title=heading)
-
+                    line.params['heading'] = arr
+                # Convert to a Things compatible element.
                 todo = TJSTodo(Operation.CREATE, **line.params)
                 self.data.append(todo)
         container = TJSContainer(self.data)

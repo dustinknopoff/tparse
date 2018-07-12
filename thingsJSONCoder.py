@@ -29,8 +29,13 @@ class TJSContainer:
                 d['id'] = item.id
             if self.reveal:
                 d['reveal'] = True
+            remove = {}
+            for key in item.attributes.keys():
+                if item.attributes[key] is '' or len(item.attributes[key]) == 0:
+                    remove[key] = item.attributes[key]
+            item.attributes = {k: v for k, v in item.attributes.items() if k not in remove}
+            d['attributes'] = item.attributes
             result.append(d)
-
         return json.dumps(result)
 
 
