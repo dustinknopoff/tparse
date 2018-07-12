@@ -52,7 +52,7 @@ def main():
     args = argsparsed.parse_args()
     if args.file:
         print(f"Accessing {os.path.basename(args.file)} now.")
-        string = open(args.file, 'r')
+        string = open(args.file, 'r').read()
     elif args.clip:
         print("Accessing the clipboard now.")
         string = clipper()

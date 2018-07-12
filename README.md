@@ -57,6 +57,35 @@ cd py-thingsparser
 python install .
 ```
 
+<details>
+<summary>  Not available yet.</summary>
+### For iOS.
+
+1. Make sure you have [Pythonista](https://itunes.apple.com/us/app/pythonista-3/id1085978097?ls=1&mt=8).
+2. Install [StaSH](https://github.com/ywangd/stash).
+
+```
+import requests as r; exec(r.get('http://bit.ly/get-stash').text)
+```
+
+3. Run `launch_stach.py`.
+4.  Enter the following into the StaSH console:
+
+```
+wget https://github.com/dustinknopoff/py-thingsparser/releases/download/v0.1-beta.1/tparse-0.1.tar.gz
+```
+
+5. Enter the following:
+
+```
+tar -xzf tparse-0.1.tar.gz
+```
+<br />
+**For use as a share sheet extension**
+
+Go to Settings>Share Extension Shortcuts>`+`>find and click `things_parser.py`> add `-c` as arguments> customize title and icon details> tap Done.
+</details>
+
 ## A More Technical Overview
 
 The original used a combination of *Moment.js*, *Chrono.js*, and *Drafts 5* specific wrappers for the *Things 3* URL scheme and callback urls. This repository also includes a Python wrapper for *Things 3* and callback urls.
