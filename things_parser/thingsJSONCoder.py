@@ -1,7 +1,7 @@
 #!/usr/bin/env python3.6
 import json
 from enum import Enum
-from typing import List
+from typing import List, Dict
 
 from dateutil import parser
 
@@ -10,7 +10,10 @@ from dateutil import parser
 class TJSContainer:
     def __init__(self, items):
         self.items: List[TJSModelItem] = items
-        self.reveal = False
+        self.reveal: bool = False
+
+    def __str__(self):
+        return str({'items': self.items, 'reveal': self.reveal})
 
     def set_reveal(self):
         """
@@ -48,10 +51,13 @@ class Operation(Enum):
 # Represents a Things Model Item
 class TJSModelItem:
     def __init__(self, operation):
-        self.id = ''
-        self.operation = operation
-        self.type = ''
-        self.attributes = {}
+        self.id: str = ''
+        self.operation: Operation = operation
+        self.type: str = ''
+        self.attributes: Dict[str, str] = {}
+
+    def __str__(self):
+        return str({'id': self.id, 'operation': self.operation, 'type': self.type, 'attributes': self.attributes})
 
     def add_id(self, id):
         if self.operation is Operation.update:
@@ -81,6 +87,9 @@ class TJSTodo(TJSModelItem):
         if len(self.attributes.items()) == 0:
             raise InvalidParams('Please enter a valid parameter.')
 
+    def __str__(self):
+        return str({'operation': self.operation, 'type': self.type, 'attributes': self.attributes})
+
 
 # Represents a Things Project
 class TJSProject(TJSModelItem):
@@ -98,6 +107,9 @@ class TJSProject(TJSModelItem):
         if len(self.attributes.items()) == 0:
             raise InvalidParams('Please enter a valid parameter.')
 
+    def __str__(self):
+        return str({'operation': self.operation, 'type': self.type, 'attributes': self.attributes})
+
 
 # Represents a Things Header
 class TJSHeader(TJSModelItem):
@@ -114,6 +126,9 @@ class TJSHeader(TJSModelItem):
         if len(self.attributes.items()) == 0:
             raise InvalidParams('Please enter a valid parameter.')
 
+    def __str__(self):
+        return str({'operation': self.operation, 'type': self.type, 'attributes': self.attributes})
+
 
 # Represents a Things Checklist Item
 class TJSChecklistItem(TJSModelItem):
@@ -129,6 +144,9 @@ class TJSChecklistItem(TJSModelItem):
         # If there are no valid parameters raise an error
         if len(self.attributes.items()) == 0:
             raise InvalidParams('Please enter a valid parameter.')
+
+    def __str__(self):
+        return str({'operation': self.operation, 'type': self.type, 'attributes': self.attributes})
 
 
 # Invalid Parameters Exception

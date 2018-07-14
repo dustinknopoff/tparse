@@ -62,23 +62,31 @@ class Block(ParserItem):
             templine.params = outparams
             self.lines.append(templine)
 
-    def override_non_none(self, parsed: Dict[str, str], index):
+    def override_non_none(self, parsed: List[Dict[str, str]]):
         """
         If subvalues in a block are different from the original, override.
         :param parsed: dict of parsed data.
         :param index: index of array
         """
         # For every key, value in the sub lines, check if they're different from the master and override
-        for key, value in parsed.items():
-            try:
-                # Check to see if the value is empty or not equal to the master
-                if value not in ('', []) and parsed[key] is not self.lines[index].params[key]:
+        # print(self.lines[index], " before")
+        # for key, value in parsed.items():
+        #     try:
+        #         # Check to see if the value is empty or not equal to the master
+        #         if value not in ('', []) and parsed[key] is not self.lines[index].params[key]:
+        #             self.lines[index + 1].params[key] = value
+        #     except KeyError:
+        #         self.lines[index + 1].params[key] = value
+        for index, line in enumerate(parsed):
+            for key, value in line.items():
+                try:
+                    if value not in ('', []) and line[key] is not self.params[key]:
+                        self.lines[index].params[key] = value
+                except KeyError:
                     self.lines[index].params[key] = value
-            except KeyError:
-                self.lines[index].params[key] = value
-        print(f"Current parameters in self.lines at index: {index}")
-        pprint.pprint(self.lines[index].params)
-        print('=' * 50 + '\n\n')
+            print(f"Current parameters in self.lines at index: {index}")
+            pprint.pprint(self.lines[index].params)
+            print('=' * 50 + '\n\n')
 
 
 class Line(ParserItem):
@@ -195,16 +203,20 @@ class Parser:
                 first = sentences.pop(0)
                 block.params = self.parse_line(first)
                 # Include block line in items
-                add_sentence = Line().params = block.params
+                add_sentence = Line()
+                add_sentence.params = block.params
                 self.items.append(add_sentence)
+                # TODO: Change fill_array and override to just plug in block.params and then plugin in non '', [] values
                 # Use it as the template for the rest of the sentences
                 block.fill_array(len(sentences))
+                send_parsed = []
                 for i in range(0, len(sentences)):
                     # Only change values which exist
-                    # print(block.lines[i])
-                    block.override_non_none(self.parse_line(sentences[i]), i)
+                    send_parsed.append(self.parse_line(sentences[i]))
+                print(send_parsed)
+                block.override_non_none(send_parsed)
                 for line in block.lines:
-                    # print(line)
+                    print(line)
                     self.items.append(line)
 
     def parse_line(self, string: str) -> Dict[str, str]:
