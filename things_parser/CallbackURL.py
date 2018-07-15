@@ -26,3 +26,6 @@ class CallbackURL:
         url = url.replace('%3A', ':')
         # print(url)
         webbrowser.open(url)
+
+    def set_baseurl(self, url):
+        self.base_url = url

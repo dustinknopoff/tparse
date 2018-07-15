@@ -81,7 +81,7 @@ class TJSTodo(TJSModelItem):
                 if str(value).lower() in ['true', 'false']:
                     value = bool(value)
                 elif 'date' in str(key).lower():
-                    value = parser.parse(value)
+                    value = parser.parse(value).isoformat()
                 self.attributes[key.lower()] = value
         # If there are no valid parameters raise an error
         if len(self.attributes.items()) == 0:
@@ -102,6 +102,10 @@ class TJSProject(TJSModelItem):
         self.type = 'project'
         for key, value in parameters.items():
             if str(key).lower() in possible_params:
+                if str(value).lower() in ['true', 'false']:
+                    value = bool(value)
+                elif 'date' in str(key).lower():
+                    value = parser.parse(value).isoformat()
                 self.attributes[key.lower()] = value
         # If there are no valid parameters raise an error
         if len(self.attributes.items()) == 0:
@@ -121,6 +125,10 @@ class TJSHeader(TJSModelItem):
         self.type = 'heading'
         for key, value in parameters.items():
             if str(key).lower() in possible_params:
+                if str(value).lower() in ['true', 'false']:
+                    value = bool(value)
+                elif 'date' in str(key).lower():
+                    value = parser.parse(value).isoformat()
                 self.attributes[key.lower()] = value
         # If there are no valid parameters raise an error
         if len(self.attributes.items()) == 0:
@@ -140,6 +148,10 @@ class TJSChecklistItem(TJSModelItem):
         self.type = 'checklist-item'
         for key, value in parameters.items():
             if str(key).lower() in possible_params:
+                if str(value).lower() in ['true', 'false']:
+                    value = bool(value)
+                elif 'date' in str(key).lower():
+                    value = parser.parse(value).isoformat()
                 self.attributes[key.lower()] = value
         # If there are no valid parameters raise an error
         if len(self.attributes.items()) == 0:
