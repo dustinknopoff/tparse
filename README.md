@@ -96,7 +96,7 @@ Go to Settings>Share Extension Shortcuts>`+`>find and click `things_parser.py`> 
 ### Usage
 
 ```
-usage: things_parser.py [-h] [-f FILE] [-c] [-t]
+usage: tparse.py [-h] [-f FILE] [-c] [-t]
 
 Natural Things Parser:
 
