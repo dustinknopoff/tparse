@@ -111,7 +111,6 @@ class Parser:
         :return: updated dict of parsed data.
         """
         # Temporary variable for title-date
-        # print(parsed)
         string = parsed.pop('title-date')
         combned = ''
         if hasattr(string, '__iter__'):
