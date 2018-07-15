@@ -9,7 +9,7 @@
 
 1. Cannot recognize `Wednesday at 6` as PM or AM but returns 6 as this the day of the output.
 
-~~2. Block sublines are overrides by the last element.~~
+~~2. Block sublines are overriden by the last element.~~
 
 3. The JSON package is not accepted by *Things 3* as valid.
 
