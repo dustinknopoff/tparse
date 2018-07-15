@@ -47,46 +47,22 @@ class Block(ParserItem):
     def __str__(self):
         return str(self.lines)
 
-    def fill_array(self, maximum):
-        """
-        Fill array of lines with params as template.
-        :param maximum: Number of elements to add to list.
-        """
-        # Make a copy of params
-        outparams = self.params
-        # If there is a new project, copy project name to array as project not newProject
-        if 'new-project' in self.params.keys() and self.params['new-project'] is not '':
-            outparams['project'] = outparams.pop('new-project')
-        for i in range(0, maximum):
-            templine = Line()
-            templine.params = outparams
-            self.lines.append(templine)
-
-    def override_non_none(self, parsed: List[Dict[str, str]]):
-        """
-        If subvalues in a block are different from the original, override.
-        :param parsed: dict of parsed data.
-        :param index: index of array
-        """
-        # For every key, value in the sub lines, check if they're different from the master and override
-        # print(self.lines[index], " before")
-        # for key, value in parsed.items():
-        #     try:
-        #         # Check to see if the value is empty or not equal to the master
-        #         if value not in ('', []) and parsed[key] is not self.lines[index].params[key]:
-        #             self.lines[index + 1].params[key] = value
-        #     except KeyError:
-        #         self.lines[index + 1].params[key] = value
-        for index, line in enumerate(parsed):
+    def fill_array(self, parsed: List[Dict[str, str]]):
+        # For every parsed line in the block
+        for line in parsed:
+            this_line = Line()
+            temp = {}
+            # and for every key, value pair
             for key, value in line.items():
-                try:
-                    if value not in ('', []) and line[key] is not self.params[key]:
-                        self.lines[index].params[key] = value
-                except KeyError:
-                    self.lines[index].params[key] = value
-            print(f"Current parameters in self.lines at index: {index}")
-            pprint.pprint(self.lines[index].params)
-            print('=' * 50 + '\n\n')
+                # If a child line does not override the parent line use the parent value
+                if value in ('', []):
+                    temp[key] = self.params[key]
+                else:
+                    # Use child value
+                    temp[key] = value
+            this_line.params = temp
+            # Add to self.lines
+            self.lines.append(this_line)
 
 
 class Line(ParserItem):
@@ -208,15 +184,12 @@ class Parser:
                 self.items.append(add_sentence)
                 # TODO: Change fill_array and override to just plug in block.params and then plugin in non '', [] values
                 # Use it as the template for the rest of the sentences
-                block.fill_array(len(sentences))
                 send_parsed = []
                 for i in range(0, len(sentences)):
                     # Only change values which exist
                     send_parsed.append(self.parse_line(sentences[i]))
-                print(send_parsed)
-                block.override_non_none(send_parsed)
+                block.fill_array(send_parsed)
                 for line in block.lines:
-                    print(line)
                     self.items.append(line)
 
     def parse_line(self, string: str) -> Dict[str, str]:
@@ -303,6 +276,11 @@ class ThingsAdapter:
                     line.params['heading'] = arr
                 # Convert to a Things compatible element.
                 todo = TJSTodo(Operation.CREATE, **line.params)
-                self.data.append(todo)
+                # If the todo has no attributes, ignore
+                if all(value in ('', []) for value in todo.attributes.values()):
+                    continue
+                # Otherwise, add to self.data
+                else:
+                    self.data.append(todo)
         container = TJSContainer(self.data)
         return container.export()

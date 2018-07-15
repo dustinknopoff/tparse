@@ -41,7 +41,7 @@ def main():
         make bread
         toast
         oranges !Friday
-        -at London do More
+        at London do More
         ``
         """
     argsparsed = argparse.ArgumentParser(description='Natural Things Parser:')
@@ -58,7 +58,7 @@ def main():
         string = clipper()
     elif args.test:
         print("Using tests now.")
-        string = test2
+        string = teststring
     else:
         raise ValueError("Please enter a valid argument.")
     parser = Parser(delimiters, escapes)
