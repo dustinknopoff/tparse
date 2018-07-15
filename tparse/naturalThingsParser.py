@@ -2,12 +2,11 @@
 import pprint
 import re
 from datetime import timedelta, datetime
-from typing import Dict
 
 from dateutil.parser import parse
 
-from things_parser.CallbackURL import *
-from things_parser.thingsJSONCoder import *
+from tparse.CallbackURL import *
+from tparse.thingsJSONCoder import *
 
 delimiters: Dict[str, str] = {
     'tags': "@",

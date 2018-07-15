@@ -1,5 +1,5 @@
 import pytest
-from things_parser.thingsJSONCoder import *
+from tparse.thingsJSONCoder import *
 
 
 def check_exception():

@@ -14,14 +14,14 @@ setup(name='tparse',
       author='Dustin Knopoff',
       author_email='knopoffdustin1@gmail.com',
       license='MIT',
-      packages=['things_parser'],
+      packages=['tparse'],
       install_requires=[
           'pyperclip',
           'python-dateutil'
       ],
       entry_points={
           'console_scripts': [
-                'tparse=things_parser.things_parser:main'
+                'tparse=tparse.tparse:main'
             ],
       },
       zip_safe=False)

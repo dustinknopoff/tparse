@@ -118,5 +118,5 @@ This is not a direct porting of [@pdavidsonreiler](https://polymaths.blog/2018/0
 2. `Block` and `Line` types inherit common functionality from the `ParsedItem` class. This is particularly helpful in the case of `Block`s due to the *parent* line being separated from it's children architecturally rather than by call.
 3. The conversion to Things elements is separated into it's own class for increased encapsulation and clarity.
 
-- [thingsJSONCoder.py](things_parser/thingsJSONCoder.py) is the python wrapper for [thingsJSONCoder](https://github.com/culturedcode/ThingsJSONCoder) which is written in Swift.
-- [CallbackURL.py](things_parser/CallbackURL.py) is the python wrapper for [Callback URL](https://github.com/agiletortoise/drafts-documentation/wiki/CallbackURL) which is Draft's JavaScript wrapper for callback urls in Swift.
+- [thingsJSONCoder.py](tparse/thingsJSONCoder.py) is the python wrapper for [thingsJSONCoder](https://github.com/culturedcode/ThingsJSONCoder) which is written in Swift.
+- [CallbackURL.py](tparse/CallbackURL.py) is the python wrapper for [Callback URL](https://github.com/agiletortoise/drafts-documentation/wiki/CallbackURL) which is Draft's JavaScript wrapper for callback urls in Swift.

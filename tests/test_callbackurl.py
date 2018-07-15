@@ -1,4 +1,4 @@
-from things_parser.CallbackURL import CallbackURL
+from tparse.CallbackURL import CallbackURL
 import pytest
 
 
