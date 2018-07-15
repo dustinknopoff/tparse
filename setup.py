@@ -24,4 +24,6 @@ setup(name='tparse',
                 'tparse=tparse.tparse:main'
             ],
       },
-      zip_safe=False)
+      zip_safe=False,
+      setup_requires='pytest-runner',
+      tests_require=['pytest'])
