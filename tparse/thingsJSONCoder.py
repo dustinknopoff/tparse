@@ -40,7 +40,7 @@ class TJSContainer:
             item.attributes = {k: v for k, v in item.attributes.items() if k not in remove}
             d['attributes'] = item.attributes
             result.append(d)
-        return json.dumps(result)
+        return json.dumps(result, separators=(',', ':'))
 
 
 class Operation(Enum):

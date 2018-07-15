@@ -23,8 +23,8 @@ class CallbackURL:
         """
         # print(self.parameters)
         url = self.base_url + urlencode(self.parameters, quote_via=quote_plus, encoding='utf8')
-        url = url.replace('%3A', ':')
-        # print(url)
+        url = url.replace('%3A', ':').replace('%2C', ',').replace('+', '%20')
+        print(url)
         webbrowser.open(url)
 
     def set_baseurl(self, url):
