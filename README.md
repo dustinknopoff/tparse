@@ -74,7 +74,7 @@ import requests as r; exec(r.get('http://bit.ly/get-stash').text)
 4.  Enter the following into the StaSH console:
 
 ```
-wget https://github.com/dustinknopoff/py-thingsparser/releases/download/v0.1-beta.1/tparse-0.1.tar.gz
+wget https://github.com/dustinknopoff/py-thingsparser/releases/download/v0.1-beta-2/tparse-0.2.tar.gz
 ```
 
 5. Enter the following:
@@ -93,7 +93,7 @@ tar -xzf tparse-0.1.tar.gz
 Go to Settings>Share Extension Shortcuts>`+`>find and click `things_parser.py`> add `-f` as arguments> customize title and icon details> tap Done.
 </details>
 
-### Arguments
+### Usage
 
 ```
 usage: things_parser.py [-h] [-f FILE] [-c] [-t]
