@@ -7,7 +7,7 @@ def readme():
 
 
 setup(name='tparse',
-      version='0.2',
+      version='0.3',
       description='Natural language parser for Things 3.',
       long_description=readme(),
       url='https://github.com/dustinknopoff/py-thingsparser',

@@ -1,21 +1,8 @@
 # Natural Language Things Parser in Python
 
-## NOTE:
-
-<details>
-<summary>
-	The following are issues with this release:
-</summary>
-
-1. Cannot recognize `Wednesday at 6` as PM or AM but returns 6 as this the day of the output.
-
-~~2. Block sublines are overriden by the last element.~~
-
-3. The JSON package is not accepted by *Things 3* as valid.
-
 ### Plan:
 
-- [ ] fix issues
+- [ x] fix issues
 - [ ] make an Automator Service for applying to a file
 - [ ] make an Automator Application for dragging files on to to run.
 </details>
@@ -120,3 +107,13 @@ This is not a direct porting of [@pdavidsonreiler](https://polymaths.blog/2018/0
 
 - [thingsJSONCoder.py](tparse/thingsJSONCoder.py) is the python wrapper for [thingsJSONCoder](https://github.com/culturedcode/ThingsJSONCoder) which is written in Swift.
 - [CallbackURL.py](tparse/CallbackURL.py) is the python wrapper for [Callback URL](https://github.com/agiletortoise/drafts-documentation/wiki/CallbackURL) which is Draft's JavaScript wrapper for callback urls in Swift.
+
+## NOTE:
+
+The following are issues with this release:
+
+1. Cannot recognize `Wednesday at 6` as PM or AM but returns 6 as this the day of the output.
+
+~~2. Block sublines are overriden by the last element.~~
+
+~~3. The JSON package is not accepted by *Things 3* as valid.~~
