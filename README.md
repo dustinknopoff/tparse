@@ -67,7 +67,7 @@ wget https://github.com/dustinknopoff/py-thingsparser/releases/download/v0.1-bet
 5. Enter the following:
 
 ```
-tar -xzf tparse-0.1.tar.gz
+tar -xzf tparse-0.2.tar.gz
 ```
 
 6. Go to `things_parser.py`. 
@@ -116,4 +116,4 @@ The following are issues with this release:
 
 ~~2. Block sublines are overriden by the last element.~~
 
-~~3. The JSON package is not accepted by *Things 3* as valid.~~
+3. The JSON package is not accepted by *Things 3* as valid.
