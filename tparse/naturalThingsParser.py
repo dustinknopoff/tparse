@@ -1,21 +1,21 @@
 #!/usr/bin/env python3.6
-import pprint
+from pprint import pprint
 import re
 from datetime import timedelta, datetime
-
 from dateutil.parser import parse
 
 from tparse.CallbackURL import *
 from tparse.thingsJSONCoder import *
 
 delimiters: Dict[str, str] = {
-    'tags': "@",
-    'project': "#",
-    'new-project': "+",
-    'notes': "//",
+    'tags': "#",
+    'project': "[",
+    'new-project': "[[",
+    'notes': "::",
     'heading': "==",
-    'deadline': "!",
+    'deadline': ">",
     'checklist-items': "*",
+    'due': '>',
     'block': "``"
 }
 
@@ -34,7 +34,7 @@ escapes: Dict[str, str] = {
 # Represents common values of Blocks and Lines
 class ParserItem:
     def __init__(self, string):
-        self.params: Dict[str, str] = {}
+        self.params: Dict = {}
         self.string: str = string
 
 
@@ -136,17 +136,13 @@ class Parser:
         return parsed
 
     @staticmethod
-    def __parse_deadline(parsed: Dict[str, str]) -> Dict[str, str]:
+    def __parse_date(date: str) -> str:
         """
         Convert deadline to Things Compatible date format.
         :param parsed: dict of parsed data.
         :return: updated dict of parsed data.
         """
-        if 'deadline' in parsed.keys():
-            parsd = parse(parsed['deadline'], fuzzy=True, default=datetime.now())
-            if parsd < datetime.now():
-                parsd = parsd + timedelta(days=7)
-            parsed['deadline'] = parsd.isoformat()
+        parsed = parse(date, fuzzy=True, default=datetime.now()).isoformat()
         return parsed
 
     # TODO: Allow @,#, etc. to be including using escaping
@@ -196,54 +192,54 @@ class Parser:
         :param string: a single line of text.
         """
         # Allow multiple tags and checklist items
-        result = {'*': [], '@': [], '==': []}
+        result = {'*': [], '@': []}
         # Split string by delimiters
         pattern = '|'.join(map(re.escape, tuple(self.delimiter.values())))
         split_list = list(self.__split_before(pattern, string))
+        print(split_list)
         for i in range(0, len(split_list)):
-            if i == 0:
-                # The first must be title and or date
-                result['title-date'] = split_list[i].strip()
-            else:
                 # Add to result as {delimiter: value}
+                print(str(split_list[i]))
                 if str(split_list[i])[:2] in tuple(self.delimiter.values()):
-                    if str(split_list[i])[:2] is '==':
-                        result[str(split_list[i])[:2]].append(str(split_list[i])[2:].strip())
-                    else:
-                        result[str(split_list[i])[:2]] = str(split_list[i])[2:].strip()
+                    result[str(split_list[i])[:2]] = str(split_list[i])[2:].strip()
                 elif str(split_list[i])[:1] in tuple(self.delimiter.values()):
                     # If it can be a list, add to the list instead of overriding
                     if str(split_list[i])[:1] in ('*', '@'):
                         result[str(split_list[i])[:1]].append(str(split_list[i])[1:].strip())
                     else:
                         result[str(split_list[i])[:1]] = str(split_list[i])[1:].strip()
+                elif str(split_list[i]) is '':
+                    pass
                 else:
+                    print(result)
                     raise Exception("Impossible error.")
         # Flatten lists if there is only one element
         if len(result['*']) == 1:
             result['*'] = result['*'][0]
         if len(result['@']) == 1:
             result['@'] = result['@'][0]
-        if len(result['==']) == 1:
-            result['=='] = result['=='][0]
         # result = self.__escape(result)
         # Convert to names instead of delimiters as keys
         result = self.__convert_to_names(result)
-        # Split the titles and dates
-        result = self.__split_title_date(result)
+        # # Split the titles and dates
+        # result = self.__split_title_date(result)
         # Get the date from the deadline
-        result = self.__parse_deadline(result)
+        try:
+            result['deadline'] = self.__parse_date(result['deadline'])
+            result['due'] = self.__parse_date(result['due'])
+        except KeyError:
+            pass
         return result
 
     def send_to_things(self):
         adapter = ThingsAdapter(self.items)
         package = adapter.create()
         print("Final JSON:\n" + '=' * 50)
-        pprint.pprint(package)
+        pprint(package)
         cb = CallbackURL()
         cb.base_url = "things:///json?"
         cb.add_parameter("data", package)
-        cb.open()
+        # cb.open()
 
 
 class ThingsAdapter:
@@ -254,6 +250,7 @@ class ThingsAdapter:
     def create(self):
         # For every item
         for line in self.items:
+            print(line.params)
             # If there is a new project key, make a new project and add to data
             if type(line) is dict:
                 continue
@@ -265,14 +262,12 @@ class ThingsAdapter:
                 if 'checklist-item' in line.params.keys():
                     arr = []
                     for checklist in line.params['checklist-item']:
-                        TJSChecklistItem(Operation.CREATE, title=checklist)
+                        arr.append(str(TJSChecklistItem(Operation.CREATE, title=checklist)))
                     line.params['checklist-item'] = arr
                 if 'heading' in line.params.keys():
-                    arr = []
-                    for heading in line.params['heading']:
-                        TJSHeader(Operation.CREATE, title=heading)
-                    line.params['heading'] = arr
+                    line.params['heading'] = str(TJSHeader(Operation.CREATE, title=line.params['heading']))
                 # Convert to a Things compatible element.
+                print(line.params)
                 todo = TJSTodo(Operation.CREATE, **line.params)
                 # If the todo has no attributes, ignore
                 if all(value in ('', []) for value in todo.attributes.values()):

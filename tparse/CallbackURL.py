@@ -21,8 +21,8 @@ class CallbackURL:
         """
         URL encodes baseurl and parameters and opens in default webbrowser.
         """
-        # print(self.parameters)
         url = self.base_url + urlencode(self.parameters, quote_via=quote_plus, encoding='utf8')
+        url = url.replace('%20', '')
         url = url.replace('%3A', ':').replace('%2C', ',').replace('+', '%20')
         print(url)
         webbrowser.open(url)

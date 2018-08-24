@@ -10,13 +10,14 @@ except ModuleNotFoundError:
 from tparse.naturalThingsParser import Parser
 
 delimiters: Dict[str, str] = {
-    'tags': "@",
-    'project': "#",
-    'new-project': "+",
-    'notes': "//",
+    'tags': "#",
+    'project': "[",
+    'new-project': "[[",
+    'notes': "::",
     'heading': "==",
-    'deadline': "!",
+    'deadline': ">",
     'checklist-items': "*",
+    'due': '>',
     'block': "``"
 }
 
@@ -33,8 +34,9 @@ escapes: Dict[str, str] = {
 
 
 def main():
-    teststring = "Task name at London on Wednesday at 6pm #Project Name ==Heading @Tag 1 @Tag 2 " \
-                 "//Additional Note !Friday *first thing *second thing *third thing"
+    teststring = "+Buy Milk @August 24 ==Test"
+    # teststring = "Task name at London on Wednesday at 6pm #Project Name ==Heading @Tag 1 @Tag 2 " \
+    #              "//Additional Note !Friday *first thing *second thing *third thing"
     test2 = """
         ``
         today at 1 #Portfolio @Now

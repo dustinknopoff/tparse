@@ -34,9 +34,9 @@ class TJSContainer:
             if self.reveal:
                 d['reveal'] = True
             remove = {}
-            for key in item.attributes.keys():
-                if item.attributes[key] is '' or len(item.attributes[key]) == 0:
-                    remove[key] = item.attributes[key]
+            # for key in item.attributes.keys():
+            #     if item.attributes[key] is '' or len(item.attributes[key]) == 0:
+            #         remove[key] = item.attributes[key]
             item.attributes = {k: v for k, v in item.attributes.items() if k not in remove}
             d['attributes'] = item.attributes
             result.append(d)
@@ -46,6 +46,9 @@ class TJSContainer:
 class Operation(Enum):
     CREATE = 1
     UPDATE = 2
+
+    def __str__(self):
+        return "create" if self.CREATE else "update"
 
 
 # Represents a Things Model Item
@@ -57,7 +60,9 @@ class TJSModelItem:
         self.attributes: Dict[str, str] = {}
 
     def __str__(self):
-        return str({'id': self.id, 'operation': self.operation, 'type': self.type, 'attributes': self.attributes})
+        return str({'operation': str(self.operation), 'type': self.type, 'attributes': self.attributes}) \
+            if self.operation is Operation.UPDATE else \
+            str({'type': self.type, 'attributes': self.attributes})
 
     def add_id(self, id):
         if self.operation is Operation.update:
@@ -88,7 +93,9 @@ class TJSTodo(TJSModelItem):
             raise InvalidParams('Please enter a valid parameter.')
 
     def __str__(self):
-        return str({'operation': self.operation, 'type': self.type, 'attributes': self.attributes})
+        return str({'operation': str(self.operation), 'type': self.type, 'attributes': self.attributes}) \
+            if self.operation is Operation.UPDATE else \
+            str({'type': self.type, 'attributes': self.attributes})
 
 
 # Represents a Things Project
@@ -112,7 +119,9 @@ class TJSProject(TJSModelItem):
             raise InvalidParams('Please enter a valid parameter.')
 
     def __str__(self):
-        return str({'operation': self.operation, 'type': self.type, 'attributes': self.attributes})
+        return str({'operation': str(self.operation), 'type': self.type, 'attributes': self.attributes}) \
+            if self.operation is Operation.UPDATE else \
+            str({'type': self.type, 'attributes': self.attributes})
 
 
 # Represents a Things Header
@@ -135,7 +144,9 @@ class TJSHeader(TJSModelItem):
             raise InvalidParams('Please enter a valid parameter.')
 
     def __str__(self):
-        return str({'operation': self.operation, 'type': self.type, 'attributes': self.attributes})
+        return str({'operation': str(self.operation), 'type': self.type, 'attributes': self.attributes}) \
+            if self.operation is Operation.UPDATE else \
+            str({'type': self.type, 'attributes': self.attributes})
 
 
 # Represents a Things Checklist Item
@@ -158,13 +169,11 @@ class TJSChecklistItem(TJSModelItem):
             raise InvalidParams('Please enter a valid parameter.')
 
     def __str__(self):
-        return str({'operation': self.operation, 'type': self.type, 'attributes': self.attributes})
+        return str({'operation': str(self.operation), 'type': self.type, 'attributes': self.attributes}) \
+            if self.operation is Operation.UPDATE else \
+            str({'type': self.type, 'attributes': self.attributes})
 
 
 # Invalid Parameters Exception
 class InvalidParams(Exception):
     pass
-
-# kwargs = {'title': 'Fly me Away!', 'checklist-items': ['1']}
-# tjs = TJSTodo(Operation.CREATE, **kwargs)
-# contain = TJSContainer([tjs])
